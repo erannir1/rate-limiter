@@ -25,32 +25,55 @@ curl --location --request GET 'http://localhost:8000/joke' \
 --header 'Authorization: 1111-2222-3333'
 ```
 *******
-## JaveScript(NodeJs)
-The project is under the `js` folder
 
-#### Installation
-`npm i`
+# Rate Limiter
 
-#### Run tests
-To run the service tests
-`npm run test`
+The goal of the service is to create a rate limiter for the client's requests per second and per day.
 
-#### Run the server
-To run the service you can use this command
-`npm start`
+## Run it
 
-********
-## Python
-The project is under the `python` folder.
-First create virtualenv and activate it
+The repo contains Dockerfile and docker-compose setup for multiplatform local run.
 
-#### Installation
-`pip install -r /path/to/requirements.txt`
+```bash
+cd path/to/project
+docker-compose build --no-cache
+docker-compose up -d
+```
+In order to list all the running containers
+```bash
+docker ps
+```
+Show the log of the service
+```bash
+docker logs -f rate-limiter
+```
 
-#### Run tests
-To run the service tests
-`pytest`
 
-#### Run the server
-To run the service you can use this command
-`uvicorn main:app`
+## Settings and ENVs
+
+| ENV            | Description                  | Default                          |
+|----------------|------------------------------|----------------------------------|
+| DB_CONN_STR    | connection string to MongoDB | mongodb://localhost:27017/       |
+| REDIS_HOST     | redis host string            | redis                            |
+| REDIS_PORT     | redis port int               | 6379                             |
+| REDIS_PASSWORD | password to the redis        | eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81 |
+
+
+## How it works
+
+The Rate Limiter Service works by allowing you to set and enforce rate limits for clients based on different plans.
+It utilizes a combination of MongoDB and Redis to store and manage the necessary data.
+When a request is made, the service checks the client's plan and retrieves the corresponding rate limits.
+It then counts the number of requests made by the client per second and per day using Redis as a fast and efficient counter.
+If the request count exceeds the defined limits, the service enforces the rate limit and blocks further requests from the client until the limit resets.
+This ensures that clients adhere to the specified rate limits, preventing excessive usage and promoting fair resource allocation.
+
+## Unit tests and linter
+1. Run tests locally by running:
+    ```bash
+    python -m unittest discover -s rate_limiter.tools.tests -p "*_tests.py"
+   ```
+
+2. Linter:
+    black
+    flake8

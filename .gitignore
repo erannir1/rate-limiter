@@ -1,9 +1,8 @@
-.vscode
+# Virtual env directory.
+venv
 
-/python/venv
+# Python compiles files
 __pycache__
-/python/.pytest_cache
 
-/js/node_modules
-
-.DS_Store
+# IDE config files
+.idea

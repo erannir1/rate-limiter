@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, List
 
+
 @dataclass
 class Joke:
     id: str
